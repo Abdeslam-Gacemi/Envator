@@ -3,7 +3,7 @@
 namespace Abdeslam\DotEnv;
 
 use Abdeslam\DotEnv\Contracts\ResolverInterface;
-use InvalidArgumentException;
+use Abdeslam\DotEnv\Exceptions\InvalidEnvFileException;
 
 class Resolver implements ResolverInterface
 {
@@ -25,10 +25,10 @@ class Resolver implements ResolverInterface
     {
         foreach ($this->filepaths as $filepath) {
             if (!is_string($filepath) || !file_exists($filepath)) {
-                throw new InvalidArgumentException("The file $filepath was not found.");
+                throw new InvalidEnvFileException("The file $filepath was not found.");
             }
             if (!is_readable($filepath)) {
-                throw new InvalidArgumentException("The file $filepath is not readable.");
+                throw new InvalidEnvFileException("The file $filepath is not readable.");
             }
         }
     }

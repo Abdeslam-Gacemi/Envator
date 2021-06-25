@@ -4,7 +4,8 @@ namespace Abdeslam\DotEnv;
 
 use Abdeslam\DotEnv\Contracts\ParserInterface;
 use Abdeslam\DotEnv\Contracts\ResolverInterface;
-use InvalidArgumentException;
+use Abdeslam\DotEnv\Exceptions\InvalidOptionException;
+use Abdeslam\DotEnv\Exceptions\ItemNotFoundException;
 
 class DotEnv
 {
@@ -24,9 +25,18 @@ class DotEnv
     protected $filters = [];
 
     /** @var array */
-    protected $options = [];
+    protected $options = [
+        self::GLOBAL_ENV => true,
+        self::PUT_ENV => true,
+        self::APACHE => false,
+        self::SERVER => true
+    ];
 
     const NO_DEFAULT_VALUE = '__no__default__value__';
+    const GLOBAL_ENV = 0;
+    const PUT_ENV = 1;
+    const APACHE = 2;
+    const SERVER = 3;
 
     public function __construct(?ResolverInterface $resolver = null, ?ParserInterface $parser = null) {
         $this->resolver = $resolver ?: new Resolver();
@@ -73,7 +83,7 @@ class DotEnv
     {
         if (!$this->has($key)) {
             if ($default == self::NO_DEFAULT_VALUE) {
-                throw new InvalidArgumentException("Item with the key $key was not found");
+                throw new ItemNotFoundException("Item with the key $key was not found");
             } else {
                 return $default;
             }
@@ -102,7 +112,26 @@ class DotEnv
 
     public function populate(array $options = [])
     {
-        // code
+        $options = array_merge($this->options, $options);
+
+        foreach ($this->all() as $key => $value) {
+           if ($options[self::GLOBAL_ENV] === true) {
+                $_ENV[$key] = $value;
+           }
+           if ($options[self::PUT_ENV] === true) {
+                putenv("$key=$value");
+            }
+            if ($options[self::APACHE] === true) {
+                if (function_exists('apache_setenv')) {
+                    apache_setenv($key, $value);
+                } else {
+                    throw new InvalidOptionException("Function apache_setenv() does not exist, unable to populate to apache environment variables");
+                }
+            }
+            if ($options[self::SERVER] === true) {
+                $_SERVER[$key] = $value;
+            }
+        }
     }
 
 }

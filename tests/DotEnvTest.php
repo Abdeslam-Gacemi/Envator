@@ -3,10 +3,10 @@
 namespace Tests;
 
 use Abdeslam\DotEnv\DotEnv;
+use Abdeslam\DotEnv\Exceptions\ItemNotFoundException;
 use Abdeslam\DotEnv\Filters\BooleanValueFilter;
 use Abdeslam\DotEnv\Parser;
 use Abdeslam\DotEnv\Resolver;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Tests\Filters\AddPrefixToKeyFilter;
 use Abdeslam\DotEnv\Filters\TrimQuotesFilter;
@@ -48,7 +48,6 @@ class DotEnvTest extends TestCase
                 ->addFilter(AddPrefixToKeyFilter::class); // custom filter
 
         $dotEnv->load(self::DEFAULT_ENV_FILE);
-        var_dump($dotEnv->all());
         $this->assertSame('abdeslam', $dotEnv->get('MY_PREFIX_username'));
         $this->assertSame('dev', $dotEnv->get('MY_PREFIX_environment'));
         $this->assertSame(true, $dotEnv->get('MY_PREFIX_debug'));
@@ -64,7 +63,7 @@ class DotEnvTest extends TestCase
 
         $this->assertSame('default', $dotEnv->get('non_existing_key', 'default'));
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ItemNotFoundException::class);
         $dotEnv->get('non_existing_key');
     }
     
@@ -93,6 +92,19 @@ class DotEnvTest extends TestCase
             'debug' => "'true'"
         ];
         $this->assertSame($items, $dotEnv->all());
+    }
+
+    
+    /**
+     * @test
+     */
+    public function dotEnvPopulate()
+    {
+        $dotEnv = new DotEnv(new Resolver(), new Parser());
+        $dotEnv->load(self::DEFAULT_ENV_FILE)->populate();
+        $this->assertSame('abdeslam', $_ENV['username']);
+        $this->assertSame('abdeslam', getenv('username'));
+        $this->assertSame('abdeslam', $_SERVER['username']);
     }
 
     protected function getDefaultDotEnv(): DotEnv
