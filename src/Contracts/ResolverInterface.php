@@ -4,6 +4,7 @@ namespace Abdeslam\DotEnv\Contracts;
 
 interface ResolverInterface
 {
-    public function __construct(array $filepaths);
+    public function setFilepaths(array $filepaths): ResolverInterface;
+    public function getFilepaths(): array;
     public function resolve();
 }

@@ -5,9 +5,15 @@ namespace Abdeslam\DotEnv\Contracts;
 interface ParserInterface
 {
     /**
-     * @param string $content the .env content to parse
+     * @param resource $resource the .env file resource to parse
+     * @return ParserInterface
      */
-    public function __construct(string $content);
+    public function setResource($resource): ParserInterface;
+
+    /**
+     * @return resource|null
+     */
+    public function getResource();
 
     /**
      * reads and parses the content of a .env file
@@ -15,5 +21,5 @@ interface ParserInterface
      * @param array $filters list of filters to filter .env variables
      * @return array the .env content as key => value pairs
      */
-    public function parse(array $filters): array;
+    public function parse(array $oldItems, array $filters = []): array;
 }
