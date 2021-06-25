@@ -1,0 +1,12 @@
+{
+    "name": "abdeslam-gacemi/dot-env",
+    "authors": [
+        {
+            "name": "abdeslam gacemi",
+            "email": "abdobling@gmail.com"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    }
+}
