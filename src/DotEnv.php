@@ -61,13 +61,14 @@ class DotEnv
 
     public function load(string ...$filepaths): DotEnv
     {
-        $this->resolver->resolve($filepaths);
+        $this->resolver->setFilepaths($filepaths)->resolve();
         foreach ($filepaths as $filepath) {
             if (in_array($filepath, $this->loadedFiles)) {
                 continue;
             }
             $resource = fopen($filepath, 'r');
             $parsedItems = $this->parser->setResource($resource)->parse($this->all(), $this->filters); 
+            fclose($resource);
             $this->items = array_merge($this->all(), $parsedItems);
             $this->loadedFiles[] = $filepath;
         }

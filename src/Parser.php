@@ -53,6 +53,7 @@ class Parser implements ParserInterface
             $value = isset($keyValue[1]) ? trim($keyValue[1]) : null;
             foreach ($filters as $filter) {
                 $this->validateFilter($filter);
+                $oldItems = array_merge($oldItems, $items);
                 /** @var FilterInterface $filter */
                 $filteredData = $filter::filter($oldItems, $key, $value);
                 $this->validateFilteredData($filteredData);
@@ -61,7 +62,6 @@ class Parser implements ParserInterface
             }
             $items[$key] = $value;
         }
-        fclose($this->resource);
         return $items;
     }
 

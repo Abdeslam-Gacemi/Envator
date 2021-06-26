@@ -25,7 +25,7 @@ class Resolver implements ResolverInterface
     {
         foreach ($this->filepaths as $filepath) {
             if (!is_string($filepath) || !file_exists($filepath)) {
-                throw new InvalidEnvFileException("The file $filepath was not found.");
+                throw new InvalidEnvFileException("The file $filepath was not found. use absolute paths instead of relative paths.");
             }
             if (!is_readable($filepath)) {
                 throw new InvalidEnvFileException("The file $filepath is not readable.");
