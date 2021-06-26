@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @author Abdeslam Gacemi <abdobling@gmail.com>
+ */
+
 namespace Abdeslam\DotEnv;
 
 use Abdeslam\DotEnv\Contracts\FilterInterface;
@@ -37,6 +41,9 @@ class Parser implements ParserInterface
         return $this->resource;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function parse(array $oldItems, array $filters = []): array
     {
         if (!$this->resource) {
@@ -65,6 +72,12 @@ class Parser implements ParserInterface
         return $items;
     }
 
+    /**
+     * check if a FQCN is a valid implementation of FilterInterface::class
+     *
+     * @param string $filter
+     * @return void
+     */
     protected function validateFilter(string $filter)
     {
         if (!class_exists($filter)) {
@@ -77,6 +90,15 @@ class Parser implements ParserInterface
         }
     }
 
+    /**
+     * checks if the returned data of the filter is a valid array
+     * 
+     * in the format ['key' => ..., 'value' => ...]
+     *
+     * @param array $filteredData
+     * @return void
+     * @throws InvalidFilterReturnValueException
+     */
     protected function validateFilteredData(array $filteredData)
     {
         if (!key_exists('key', $filteredData) || !key_exists('value', $filteredData)) {

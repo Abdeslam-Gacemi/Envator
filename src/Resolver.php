@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @author Abdeslam Gacemi <abdobling@gmail.com>
+ */
+
 namespace Abdeslam\DotEnv;
 
 use Abdeslam\DotEnv\Contracts\ResolverInterface;
@@ -10,17 +14,26 @@ class Resolver implements ResolverInterface
     /** @var array */
     protected $filepaths = [];
 
+    /**
+     * @inheritDoc
+     */
     public function setFilepaths(array $filepaths): ResolverInterface
     {
         $this->filepaths = $filepaths;
         return $this;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getFilepaths(): array
     {
         return $this->filepaths;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function resolve()
     {
         foreach ($this->filepaths as $filepath) {
