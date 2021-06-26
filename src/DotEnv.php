@@ -4,8 +4,9 @@ namespace Abdeslam\DotEnv;
 
 use Abdeslam\DotEnv\Contracts\ParserInterface;
 use Abdeslam\DotEnv\Contracts\ResolverInterface;
-use Abdeslam\DotEnv\Exceptions\InvalidOptionException;
+use Abdeslam\DotEnv\Contracts\CacheManagerInterface;
 use Abdeslam\DotEnv\Exceptions\ItemNotFoundException;
+use Abdeslam\DotEnv\Exceptions\InvalidOptionException;
 
 class DotEnv
 {
@@ -23,6 +24,9 @@ class DotEnv
 
     /** @var string[] */
     protected $filters = [];
+
+    /** @var CacheManagerInterface */
+    protected $cacheManager;
 
     /** @var array */
     protected $options = [
@@ -66,11 +70,20 @@ class DotEnv
             if (in_array($filepath, $this->loadedFiles)) {
                 continue;
             }
+            $cacheManager = $this->getCacheManager();
+            if ($cacheManager && $cacheManager->has($filepath)) {
+                $this->items = array_merge($this->items, $cacheManager->get($filepath));
+                $this->loadedFiles[] = $filepath;
+                continue;
+            }
             $resource = fopen($filepath, 'r');
             $parsedItems = $this->parser->setResource($resource)->parse($this->all(), $this->filters); 
             fclose($resource);
             $this->items = array_merge($this->all(), $parsedItems);
             $this->loadedFiles[] = $filepath;
+            if ($cacheManager) {
+                $cacheManager->set($filepath, $parsedItems);
+            }
         }
         return $this;
     }
@@ -109,6 +122,17 @@ class DotEnv
         $this->filters = [];
         $this->options = [];
         return $this;
+    }
+
+    public function setCacheManager(CacheManagerInterface $cacheManager): DotEnv
+    {
+        $this->cacheManager = $cacheManager;
+        return $this;
+    }
+
+    public function getCacheManager(): ?CacheManagerInterface
+    {
+        return $this->cacheManager;
     }
 
     public function populate(array $options = [])
