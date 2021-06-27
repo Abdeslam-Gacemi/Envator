@@ -25,13 +25,13 @@
 You can install the library via [Composer](https://getcomposer.org/).
 
 ```
-php composer.phar require Abdeslam/Envator
+php composer.phar require abdeslam/envator
 ```
 
 or
 
 ```
-composer require Abdeslam/Envator
+composer require abdeslam/envator
 ```
 
 ### 2. Manually
