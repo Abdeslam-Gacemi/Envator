@@ -1,5 +1,6 @@
 {
     "name": "abdeslam/envator",
+    "description": "A fast, flexible and customizable PHP .env loader",
     "type": "library",
     "version": "1.0.0",
     "keywords": ["env", ".env", "DotEnv", "env loader", "php"],
