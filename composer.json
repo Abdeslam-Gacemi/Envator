@@ -1,5 +1,12 @@
 {
     "name": "abdeslam/envator",
+    "type": "library",
+    "version": "1.0.0",
+    "keywords": ["env", ".env", "DotEnv", "env loader", "php"],
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/Abdeslam-Gacemi/Envator/issues"
+    },
     "authors": [
         {
             "name": "abdeslam gacemi",
@@ -20,6 +27,7 @@
         }
     },
     "require": {
+        "php": "^8.0",
         "psr/simple-cache": "^1.0"
     }
 }

@@ -1,5 +1,5 @@
 # Envator package
-**[OMISE-PHP](https://github.com/omise/omise-php)** is a **.env** file loader that supports loading multiple files, caching (using psr-16 simple-cache interface) and using filters that unable type casting of booleans, numerics and variables inside values and more ... 
+**[Envator](https://github.com/Abdeslam-Gacemi/Envator.git)** is a **.env** file loader that supports loading multiple files, caching (using psr-16 simple-cache interface) and using filters that unable type casting of booleans, numerics and variables inside values and more ... 
 
 ## Requirements
 - PHP 8.0 and above.
@@ -21,10 +21,10 @@ composer require Abdeslam/Envator
 
 ### 2. Manually
 
-If you're not using Composer, you can also clone `Abdeslam/Envator` repository into the directory of sample code that you just installed this repository:
+If you're not using Composer, you can also clone `Abdeslam/Envator` repository into your directory:
 
 ```
-git clone https://github.com/omise/omise-php
+git clone https://github.com/Abdeslam-Gacemi/Envator.git
 ```
 
 However, using Composer is recommended as you can easily keep the library up-to-date.
