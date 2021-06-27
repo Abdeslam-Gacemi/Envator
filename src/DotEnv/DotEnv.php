@@ -65,6 +65,18 @@ class DotEnv
     }
 
     /**
+     * sets the array of filters to a list of FQCNs of implementations of FilterInterface::class
+     *
+     * @param array $filters
+     * @return DotEnv
+     */
+    public function setFilters(array $filters): DotEnv
+    {
+        $this->filters = $filters;
+        return $this;
+    }
+
+    /**
      * @param string $filter a FQCN of an implementation of FilterInterface::class
      * @return DotEnv
      */
@@ -225,7 +237,7 @@ class DotEnv
      * - DotEnv::SERVER     => bool : populate to the super global variable $_SERVER
      * @return void
      */
-    public function populate(array $options = [])
+    public function populate(array $options = []): DotEnv
     {
         $options = array_merge($this->options, $options);
         foreach ($this->all() as $key => $value) {
@@ -246,5 +258,6 @@ class DotEnv
                 $_SERVER[$key] = $value;
             }
         }
+        return $this;
     }
 }

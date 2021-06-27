@@ -6,11 +6,11 @@
 
  namespace Tests;
  
-use Abdeslam\DotEnv\Exceptions\InvalidEnvFileException;
-use Abdeslam\DotEnv\Filters\BooleanValueFilter;
-use Abdeslam\DotEnv\Filters\TrimQuotesFilter;
 use Abdeslam\DotEnv\Parser;
 use PHPUnit\Framework\TestCase;
+use Abdeslam\DotEnv\Filters\TrimQuotesFilter;
+use Abdeslam\DotEnv\Filters\BooleanValueFilter;
+use Abdeslam\DotEnv\Exceptions\InvalidEnvFileException;
 
 
  class ParserTest extends TestCase

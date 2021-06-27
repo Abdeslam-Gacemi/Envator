@@ -6,9 +6,9 @@
 
  namespace Tests;
  
-use Abdeslam\DotEnv\Exceptions\InvalidEnvFileException;
 use Abdeslam\DotEnv\Resolver;
 use PHPUnit\Framework\TestCase;
+use Abdeslam\DotEnv\Exceptions\InvalidEnvFileException;
 
  class ResolverTest extends TestCase
  {

@@ -10,6 +10,7 @@ use Abdeslam\DotEnv\DotEnv;
 use Abdeslam\DotEnv\Parser;
 use Abdeslam\DotEnv\Resolver;
 use PHPUnit\Framework\TestCase;
+use Abdeslam\DotEnv\CacheManager;
 use Tests\Filters\AddPrefixToKeyFilter;
 use Abdeslam\DotEnv\Filters\TrimQuotesFilter;
 use Abdeslam\DotEnv\Filters\BooleanValueFilter;
@@ -88,6 +89,23 @@ class DotEnvTest extends TestCase
         $this->assertSame('en', $this->dotEnv->get('DEFAULT_LOCALIZATION'));
         $this->assertSame(null, $this->dotEnv->get('DEFAULT_NULL_1'));
         $this->assertSame('', $this->dotEnv->get('DEFAULT_NULL_2'));
+    }
+    
+    /**
+     * @test
+     */
+    public function dotEnvLoadWithCache()
+    {
+        $cacheManager = new CacheManager(__DIR__);
+        $this->dotEnv->reset()
+                ->addFilter(TrimQuotesFilter::class)
+                ->addFilter(BooleanValueFilter::class)
+                ->addFilter(NumericValueFilter::class);
+        $this->dotEnv->setCacheManager($cacheManager);
+        $this->dotEnv->load(self::DEFAULT_ENV_FILE);
+        $cache = $cacheManager->get(self::DEFAULT_ENV_FILE);
+        $this->assertSame($this->dotEnv->all(), $cache);
+        unlink(__DIR__ . '/.env.cache.json');
     }
 
     /**
