@@ -1,6 +1,6 @@
 <?php
 
-namespace Abdeslam\DotEnv\Exceptions;
+namespace Abdeslam\Envator\Exceptions;
 
 use Exception;
 use Psr\SimpleCache\InvalidArgumentException;

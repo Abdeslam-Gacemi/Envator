@@ -4,11 +4,11 @@
  * @author Abdeslam Gacemi <abdobling@gmail.com>
  */
 
- namespace Tests;
- 
-use Abdeslam\DotEnv\Resolver;
+namespace Tests;
+
+use Abdeslam\Envator\Resolver;
 use PHPUnit\Framework\TestCase;
-use Abdeslam\DotEnv\Exceptions\InvalidEnvFileException;
+use Abdeslam\Envator\Exceptions\InvalidEnvFileException;
 
  class ResolverTest extends TestCase
  {

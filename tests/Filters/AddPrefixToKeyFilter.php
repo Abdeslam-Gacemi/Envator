@@ -2,7 +2,7 @@
 
 namespace Tests\Filters;
 
-use Abdeslam\DotEnv\Contracts\FilterInterface;
+use Abdeslam\Envator\Contracts\FilterInterface;
 
 class AddPrefixToKeyFilter implements FilterInterface
 {

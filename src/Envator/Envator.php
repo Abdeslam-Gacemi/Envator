@@ -3,15 +3,15 @@
  * @author Abdeslam Gacemi <abdobling@gmail.com>
  */
 
-namespace Abdeslam\DotEnv;
+namespace Abdeslam\Envator;
 
 use Psr\SimpleCache\CacheInterface;
-use Abdeslam\DotEnv\Contracts\ParserInterface;
-use Abdeslam\DotEnv\Contracts\ResolverInterface;
-use Abdeslam\DotEnv\Exceptions\ItemNotFoundException;
-use Abdeslam\DotEnv\Exceptions\InvalidOptionException;
+use Abdeslam\Envator\Contracts\ParserInterface;
+use Abdeslam\Envator\Contracts\ResolverInterface;
+use Abdeslam\Envator\Exceptions\ItemNotFoundException;
+use Abdeslam\Envator\Exceptions\InvalidOptionException;
 
-class DotEnv
+class Envator
 {
     /** @var ResolverInterface */
     protected $resolver;
@@ -68,9 +68,9 @@ class DotEnv
      * sets the array of filters to a list of FQCNs of implementations of FilterInterface::class
      *
      * @param array $filters
-     * @return DotEnv
+     * @return Envator
      */
-    public function setFilters(array $filters): DotEnv
+    public function setFilters(array $filters): self
     {
         $this->filters = $filters;
         return $this;
@@ -78,9 +78,9 @@ class DotEnv
 
     /**
      * @param string $filter a FQCN of an implementation of FilterInterface::class
-     * @return DotEnv
+     * @return Envator
      */
-    public function addFilter(string $filter): DotEnv
+    public function addFilter(string $filter): self
     {
         $this->filters[] = $filter;
         return $this;
@@ -109,9 +109,9 @@ class DotEnv
      * resolves, parses and stores the content of .env files or load them from the cache if the cache is active and the file is cached
      *
      * @param string[] $filepaths file paths of .env files
-     * @return DotEnv
+     * @return Envator
      */
-    public function load(string ...$filepaths): DotEnv
+    public function load(string ...$filepaths): self
     {
         $this->resolver->setFilepaths(...$filepaths)->resolve();
         foreach ($filepaths as $filepath) {
@@ -189,9 +189,9 @@ class DotEnv
     /**
      * resets the object
      *
-     * @return DotEnv
+     * @return Envator
      */
-    public function reset(): DotEnv
+    public function reset(): self
     {
         $this->loadedFiles = [];
         $this->items = [];
@@ -209,9 +209,9 @@ class DotEnv
      * activates the cache and sets the CacheManager
      *
      * @param CacheInterface $cacheManager
-     * @return DotEnv
+     * @return Envator
      */
-    public function setCacheManager(CacheInterface $cacheManager): DotEnv
+    public function setCacheManager(CacheInterface $cacheManager): self
     {
         $this->cacheManager = $cacheManager;
         return $this;
@@ -231,13 +231,13 @@ class DotEnv
      * populate items loaded from .env files to the environment
      *
      * @param array $options possible options are:
-     * - DotEnv::GLOBAL_ENV => bool : populate to the super global variable $_ENV
-     * - DotEnv::PUT_ENV    => bool : #1 populate using the function putenv()
-     * - DotEnv::APACHE     => bool : populate using the function apache_setenv()
-     * - DotEnv::SERVER     => bool : populate to the super global variable $_SERVER
+     * - Envator::GLOBAL_ENV => bool : populate to the super global variable $_ENV
+     * - Envator::PUT_ENV    => bool : #1 populate using the function putenv()
+     * - Envator::APACHE     => bool : populate using the function apache_setenv()
+     * - Envator::SERVER     => bool : populate to the super global variable $_SERVER
      * @return void
      */
-    public function populate(array $options = []): DotEnv
+    public function populate(array $options = []): self
     {
         $options = array_merge($this->options, $options);
         foreach ($this->all() as $key => $value) {

@@ -4,10 +4,10 @@
  * @author Abdeslam Gacemi <abdobling@gmail.com>
  */
 
-namespace Abdeslam\DotEnv;
+namespace Abdeslam\Envator;
 
-use Abdeslam\DotEnv\Contracts\InvalidCacheItemException;
-use Abdeslam\DotEnv\Exceptions\InvalidCacheDirectoryException;
+use Abdeslam\Envator\Contracts\InvalidCacheItemException;
+use Abdeslam\Envator\Exceptions\InvalidCacheDirectoryException;
 use Psr\SimpleCache\CacheInterface;
 use SplFileInfo;
 

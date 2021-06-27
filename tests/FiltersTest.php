@@ -7,11 +7,11 @@
 namespace Tests;
 
 use PHPUnit\Framework\TestCase;
-use Abdeslam\DotEnv\Filters\VariableFilter;
-use Abdeslam\DotEnv\Filters\TrimQuotesFilter;
-use Abdeslam\DotEnv\Filters\BooleanValueFilter;
-use Abdeslam\DotEnv\Filters\NumericValueFilter;
-use Abdeslam\DotEnv\Filters\EmptyStringToNullFilter;
+use Abdeslam\Envator\Filters\VariableFilter;
+use Abdeslam\Envator\Filters\TrimQuotesFilter;
+use Abdeslam\Envator\Filters\BooleanValueFilter;
+use Abdeslam\Envator\Filters\NumericValueFilter;
+use Abdeslam\Envator\Filters\EmptyStringToNullFilter;
 
 class FiltersTest extends TestCase
 {

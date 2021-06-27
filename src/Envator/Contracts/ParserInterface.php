@@ -1,8 +1,8 @@
 <?php
 
-namespace Abdeslam\DotEnv\Contracts;
+namespace Abdeslam\Envator\Contracts;
 
-use Abdeslam\DotEnv\Exceptions\InvalidResourceException;
+use Abdeslam\Envator\Exceptions\InvalidResourceException;
 
 interface ParserInterface
 {

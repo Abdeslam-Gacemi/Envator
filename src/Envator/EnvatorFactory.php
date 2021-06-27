@@ -4,18 +4,18 @@
  * @author Abdeslam Gacemi <abdobling@gmail.com>
  */
 
-namespace Abdeslam\DotEnv;
+namespace Abdeslam\Envator;
 
-use Abdeslam\DotEnv\DotEnv;
-use Abdeslam\DotEnv\CacheManager;
-use Abdeslam\DotEnv\Filters\VariableFilter;
-use Abdeslam\DotEnv\Filters\TrimQuotesFilter;
-use Abdeslam\DotEnv\Filters\BooleanValueFilter;
-use Abdeslam\DotEnv\Filters\NumericValueFilter;
-use Abdeslam\DotEnv\Filters\EmptyStringToNullFilter;
-use Abdeslam\DotEnv\Exceptions\InvalidEnvFileException;
+use Abdeslam\Envator\Envator;
+use Abdeslam\Envator\CacheManager;
+use Abdeslam\Envator\Filters\VariableFilter;
+use Abdeslam\Envator\Filters\TrimQuotesFilter;
+use Abdeslam\Envator\Filters\BooleanValueFilter;
+use Abdeslam\Envator\Filters\NumericValueFilter;
+use Abdeslam\Envator\Filters\EmptyStringToNullFilter;
+use Abdeslam\Envator\Exceptions\InvalidEnvFileException;
 
-class DotEnvFactory
+class EnvatorFactory
 {
     protected static $defaultFilters = [
         TrimQuotesFilter::class,
@@ -25,19 +25,19 @@ class DotEnvFactory
         VariableFilter::class,
     ];
     /**
-     * static factory method for DotEnv::class
+     * static factory method for Envator::class
      *
      * @param array $filepaths an array of filepaths of .env files
      * @param array $filters an array of FQCNs of implementations of FilterInterface::class
      * @param array $options an array of options for the populate() method:
-     * - DotEnv::GLOBAL_ENV => bool : populate to super global $_ENV
-     * - DotEnv::PUT_ENV => bool : populate with the function putenv()
-     * - DotEnv::APACHE => bool : populate with the function apache_setenv()
-     * - DotEnv::SERVER => bool : populate to super global $_SERVER
+     * - Envator::GLOBAL_ENV => bool : populate to super global $_ENV
+     * - Envator::PUT_ENV => bool : populate with the function putenv()
+     * - Envator::APACHE => bool : populate with the function apache_setenv()
+     * - Envator::SERVER => bool : populate to super global $_SERVER
      * @var string|null $cacheDir the directory to use for caching (setting this parameter activates the cache automatically)
-     * @return DotEnv
+     * @return Envator
      */
-    public static function create(array $filepaths, ?array $filters = null, array $options = [], ?string $cacheDir = null): DotEnv
+    public static function create(array $filepaths, ?array $filters = null, ?string $cacheDir = null): Envator
     {
         if (empty($filepaths)) {
             throw new InvalidEnvFileException("The array of env files paths must contain at least one env file path");
@@ -45,14 +45,12 @@ class DotEnvFactory
         if ($filters === null) {
             $filters = self::$defaultFilters;
         }
-        $dotEnv = new DotEnv();
-        if ($cacheDir !== null)
-        {
+        $dotEnv = new Envator();
+        if ($cacheDir !== null) {
             $dotEnv->setCacheManager(new CacheManager($cacheDir));
         }
         $dotEnv->setFilters($filters)
                 ->load(...$filepaths);
-        $dotEnv->populate($options);
         return $dotEnv;
     }
 }

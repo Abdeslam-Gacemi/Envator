@@ -4,9 +4,9 @@
  * @author Abdeslam Gacemi <abdobling@gmail.com>
  */
 
-namespace Abdeslam\DotEnv\Filters;
+namespace Abdeslam\Envator\Filters;
 
-use Abdeslam\DotEnv\Contracts\FilterInterface;
+use Abdeslam\Envator\Contracts\FilterInterface;
 
 class VariableFilter implements FilterInterface
 {

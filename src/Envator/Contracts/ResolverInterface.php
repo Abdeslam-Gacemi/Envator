@@ -4,9 +4,9 @@
  * @author Abdeslam Gacemi <abdobling@gmail.com>
  */
 
-namespace Abdeslam\DotEnv\Contracts;
+namespace Abdeslam\Envator\Contracts;
 
-use Abdeslam\DotEnv\Exceptions\InvalidEnvFileException;
+use Abdeslam\Envator\Exceptions\InvalidEnvFileException;
 
 interface ResolverInterface
 {

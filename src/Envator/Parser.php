@@ -4,15 +4,15 @@
  * @author Abdeslam Gacemi <abdobling@gmail.com>
  */
 
-namespace Abdeslam\DotEnv;
+namespace Abdeslam\Envator;
 
 use ReflectionClass;
-use Abdeslam\DotEnv\Contracts\FilterInterface;
-use Abdeslam\DotEnv\Contracts\ParserInterface;
-use Abdeslam\DotEnv\Exceptions\InvalidFilterException;
-use Abdeslam\DotEnv\Exceptions\InvalidEnvFileException;
-use Abdeslam\DotEnv\Exceptions\InvalidResourceException;
-use Abdeslam\DotEnv\Exceptions\InvalidFilterReturnValueException;
+use Abdeslam\Envator\Contracts\FilterInterface;
+use Abdeslam\Envator\Contracts\ParserInterface;
+use Abdeslam\Envator\Exceptions\InvalidFilterException;
+use Abdeslam\Envator\Exceptions\InvalidEnvFileException;
+use Abdeslam\Envator\Exceptions\InvalidResourceException;
+use Abdeslam\Envator\Exceptions\InvalidFilterReturnValueException;
 
 class Parser implements ParserInterface
 {

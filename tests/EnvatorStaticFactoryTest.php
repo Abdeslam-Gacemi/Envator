@@ -5,18 +5,18 @@
  */
 
 use PHPUnit\Framework\TestCase;
-use Abdeslam\DotEnv\DotEnvFactory;
+use Abdeslam\Envator\EnvatorFactory;
 
-class DotEnvStaticFactoryTest extends TestCase
+class EnvatorStaticFactoryTest extends TestCase
 {
     /**
      * @test
      */
-    public function dotEnvStaticFactoryCreate()
+    public function envatorStaticFactoryCreate()
     {
-        DotEnvFactory::create([
+        EnvatorFactory::create([
             __DIR__ . '/.env'
-        ]);
+        ])->populate();
         $this->assertSame('abdeslam', $_ENV['username']);
         $this->assertSame('abdeslam', $_SERVER['username']);
         $this->assertSame('abdeslam', getenv('username'));
@@ -31,16 +31,15 @@ class DotEnvStaticFactoryTest extends TestCase
     /**
      * @test
      */
-    public function dotEnvStaticFactoryCreateWithCache()
+    public function envatorStaticFactoryCreateWithCache()
     {
-        $dotEnv = DotEnvFactory::create(
+        $envator = EnvatorFactory::create(
             [__DIR__ . '/.env'],
             null,
-            [],
             __DIR__
-        );
-        $cache = $dotEnv->getCacheManager()->get(__DIR__ . '/.env');
-        $this->assertSame($dotEnv->all(), $cache);
+        )->populate();
+        $cache = $envator->getCacheManager()->get(__DIR__ . '/.env');
+        $this->assertSame($envator->all(), $cache);
         unlink(__DIR__ . '/.env.cache.json');
     }
 }

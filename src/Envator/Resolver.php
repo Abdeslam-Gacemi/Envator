@@ -4,10 +4,10 @@
  * @author Abdeslam Gacemi <abdobling@gmail.com>
  */
 
-namespace Abdeslam\DotEnv;
+namespace Abdeslam\Envator;
 
-use Abdeslam\DotEnv\Contracts\ResolverInterface;
-use Abdeslam\DotEnv\Exceptions\InvalidEnvFileException;
+use Abdeslam\Envator\Contracts\ResolverInterface;
+use Abdeslam\Envator\Exceptions\InvalidEnvFileException;
 
 class Resolver implements ResolverInterface
 {
