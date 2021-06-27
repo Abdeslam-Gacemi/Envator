@@ -1,6 +1,21 @@
 # Envator package
 **[Envator](https://github.com/Abdeslam-Gacemi/Envator.git)** is a **.env** file loader that supports loading multiple files, caching (using psr-16 simple-cache interface) and using filters that unable type casting of booleans, numerics and variables inside values and more ... 
 
+## Table of contents
+* [Requirements](https://github.com/Abdeslam-Gacemi/Envator/blob/master/README.md#requirements)
+* [Installation](https://github.com/Abdeslam-Gacemi/Envator/blob/master/README.md#installation)
+  * [using composer](https://github.com/Abdeslam-Gacemi/Envator/blob/master/README.md#1-using-composer)
+  * [Manually](https://github.com/Abdeslam-Gacemi/Envator/blob/master/README.md#2-manually)
+* [Usage](https://github.com/Abdeslam-Gacemi/Envator/blob/master/README.md#usage)
+  * [using the class Envator directly](https://github.com/Abdeslam-Gacemi/Envator/blob/master/README.md#1-using-the-class-envator-directly)
+  * [using the factory](https://github.com/Abdeslam-Gacemi/Envator/blob/master/README.md#2-using-the-factory)
+  * [adding filters](https://github.com/Abdeslam-Gacemi/Envator/blob/master/README.md#3-adding-filters)
+  * [filters using the factory](https://github.com/Abdeslam-Gacemi/Envator/blob/master/README.md#4-filters-using-the-factory)
+  * [custom filters](https://github.com/Abdeslam-Gacemi/Envator/blob/master/README.md#5-custom-filters)
+  * [options](https://github.com/Abdeslam-Gacemi/Envator/blob/master/README.md#6-options)
+  * [caching](https://github.com/Abdeslam-Gacemi/Envator/blob/master/README.md#7-caching)
+* [Customization](https://github.com/Abdeslam-Gacemi/Envator/blob/master/README.md#customization)
+
 ## Requirements
 - PHP 8.0 and above.
 
