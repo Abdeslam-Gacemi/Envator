@@ -16,7 +16,7 @@ interface ResolverInterface
      * @param array $filepaths
      * @return ResolverInterface
      */
-    public function setFilepaths(array $filepaths): ResolverInterface;
+    public function setFilepaths(string ...$filepaths): ResolverInterface;
 
     /**
      * gets the array of .env files paths

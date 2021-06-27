@@ -5,11 +5,11 @@
 
 namespace Abdeslam\DotEnv;
 
+use Psr\SimpleCache\CacheInterface;
 use Abdeslam\DotEnv\Contracts\ParserInterface;
 use Abdeslam\DotEnv\Contracts\ResolverInterface;
 use Abdeslam\DotEnv\Exceptions\ItemNotFoundException;
 use Abdeslam\DotEnv\Exceptions\InvalidOptionException;
-use Psr\SimpleCache\CacheInterface;
 
 class DotEnv
 {
@@ -58,7 +58,8 @@ class DotEnv
      * @param ResolverInterface|null $resolver
      * @param ParserInterface|null $parser
      */
-    public function __construct(?ResolverInterface $resolver = null, ?ParserInterface $parser = null) {
+    public function __construct(?ResolverInterface $resolver = null, ?ParserInterface $parser = null)
+    {
         $this->resolver = $resolver ?: new Resolver();
         $this->parser = $parser ?: new Parser();
     }
@@ -83,7 +84,7 @@ class DotEnv
 
     /**
      * checks if a filter is registered in $filters array
-     * 
+     *
      * @param string $filter a FQCN of an implementation of FilterInterface::class
      * @return boolean
      */
@@ -100,7 +101,7 @@ class DotEnv
      */
     public function load(string ...$filepaths): DotEnv
     {
-        $this->resolver->setFilepaths($filepaths)->resolve();
+        $this->resolver->setFilepaths(...$filepaths)->resolve();
         foreach ($filepaths as $filepath) {
             if (in_array($filepath, $this->loadedFiles)) {
                 continue;
@@ -112,7 +113,7 @@ class DotEnv
                 continue;
             }
             $resource = fopen($filepath, 'r');
-            $parsedItems = $this->parser->setResource($resource)->parse($this->all(), $this->filters); 
+            $parsedItems = $this->parser->setResource($resource)->parse($this->all(), $this->filters);
             fclose($resource);
             $this->items = array_merge($this->all(), $parsedItems);
             $this->loadedFiles[] = $filepath;
@@ -143,7 +144,7 @@ class DotEnv
     public function get(string $key, $default = self::NO_DEFAULT_VALUE): mixed
     {
         if (!$this->has($key)) {
-            if ($default == self::NO_DEFAULT_VALUE) {
+            if ($default === self::NO_DEFAULT_VALUE) {
                 throw new ItemNotFoundException("Item with the key $key was not found");
             } else {
                 return $default;
@@ -160,7 +161,7 @@ class DotEnv
      */
     public function has(string $key): bool
     {
-        return isset($this->items[$key]);
+        return array_key_exists($key, $this->items);
     }
 
     /**
@@ -183,7 +184,12 @@ class DotEnv
         $this->loadedFiles = [];
         $this->items = [];
         $this->filters = [];
-        $this->options = [];
+        $this->options = [
+            self::GLOBAL_ENV => true,
+            self::PUT_ENV => true,
+            self::APACHE => false,
+            self::SERVER => true
+        ];
         return $this;
     }
 
@@ -222,12 +228,11 @@ class DotEnv
     public function populate(array $options = [])
     {
         $options = array_merge($this->options, $options);
-
         foreach ($this->all() as $key => $value) {
-           if ($options[self::GLOBAL_ENV] === true) {
+            if ($options[self::GLOBAL_ENV] === true) {
                 $_ENV[$key] = $value;
-           }
-           if ($options[self::PUT_ENV] === true) {
+            }
+            if ($options[self::PUT_ENV] === true) {
                 putenv("$key=$value");
             }
             if ($options[self::APACHE] === true) {
@@ -242,5 +247,4 @@ class DotEnv
             }
         }
     }
-
 }

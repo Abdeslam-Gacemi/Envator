@@ -1,33 +1,48 @@
 <?php
 
+/**
+ * @author Abdeslam Gacemi <abdobling@gmail.com>
+ */
+
 namespace Tests;
 
 use Abdeslam\DotEnv\DotEnv;
-use Abdeslam\DotEnv\Exceptions\ItemNotFoundException;
-use Abdeslam\DotEnv\Filters\BooleanValueFilter;
 use Abdeslam\DotEnv\Parser;
 use Abdeslam\DotEnv\Resolver;
 use PHPUnit\Framework\TestCase;
 use Tests\Filters\AddPrefixToKeyFilter;
 use Abdeslam\DotEnv\Filters\TrimQuotesFilter;
+use Abdeslam\DotEnv\Filters\BooleanValueFilter;
+use Abdeslam\DotEnv\Filters\NumericValueFilter;
+use Abdeslam\DotEnv\Filters\EmptyStringToNullFilter;
+use Abdeslam\DotEnv\Exceptions\ItemNotFoundException;
 
 class DotEnvTest extends TestCase
 {
+    /** @var string */
     const DEFAULT_ENV_FILE = __DIR__ . '/.env';
+
+    /** @var DotEnv */
+    protected $dotEnv;
     
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->dotEnv = (new DotEnv())->load(self::DEFAULT_ENV_FILE);
+    }
+
     /**
      * @test
      */
     public function dotEnvFilters()
     {
-        $dotEnv = new DotEnv(new Resolver(), new Parser());
-        $dotEnv->addFilter(TrimQuotesFilter::class);
-        $dotEnv->addFilter(BooleanValueFilter::class);
-        $this->assertTrue($dotEnv->hasFilter(TrimQuotesFilter::class));
-        $this->assertTrue($dotEnv->hasFilter(BooleanValueFilter::class));
+        $this->dotEnv->addFilter(TrimQuotesFilter::class);
+        $this->dotEnv->addFilter(BooleanValueFilter::class);
+        $this->assertTrue($this->dotEnv->hasFilter(TrimQuotesFilter::class));
+        $this->assertTrue($this->dotEnv->hasFilter(BooleanValueFilter::class));
         $this->assertSame(
             [TrimQuotesFilter::class, BooleanValueFilter::class],
-            $dotEnv->getFilters()
+            $this->dotEnv->getFilters()
         );
     }
 
@@ -36,21 +51,43 @@ class DotEnvTest extends TestCase
      */
     public function dotEnvLoad()
     {
-        $dotEnv = $this->getDefaultDotEnv();
-        $this->assertSame('abdeslam', $dotEnv->get('username'));
-        $this->assertSame('dev', $dotEnv->get('"environment"'));
-        $this->assertSame("'true'", $dotEnv->get('debug'));
+        $this->assertSame('abdeslam', $this->dotEnv->get('username'));
+        $this->assertSame('dev', $this->dotEnv->get('"environment"'));
+        $this->assertSame("'true'", $this->dotEnv->get('debug'));
+        $this->assertSame("FALSE", $this->dotEnv->get('verbose'));
 
         // adding filters
-        $dotEnv->reset();
-        $dotEnv->addFilter(TrimQuotesFilter::class)
+        $this->dotEnv->reset();
+        $this->dotEnv->addFilter(TrimQuotesFilter::class)
                 ->addFilter(BooleanValueFilter::class)
+                ->addFilter(NumericValueFilter::class)
                 ->addFilter(AddPrefixToKeyFilter::class); // custom filter
 
-        $dotEnv->load(self::DEFAULT_ENV_FILE);
-        $this->assertSame('abdeslam', $dotEnv->get('MY_PREFIX_username'));
-        $this->assertSame('dev', $dotEnv->get('MY_PREFIX_environment'));
-        $this->assertSame(true, $dotEnv->get('MY_PREFIX_debug'));
+        $this->dotEnv->load(self::DEFAULT_ENV_FILE);
+        $this->assertSame('abdeslam', $this->dotEnv->get('MY_PREFIX_username'));
+        $this->assertSame('dev', $this->dotEnv->get('MY_PREFIX_environment'));
+        $this->assertSame(true, $this->dotEnv->get('MY_PREFIX_debug'));
+        $this->assertSame(false, $this->dotEnv->get('MY_PREFIX_verbose'));
+    }
+
+    /**
+     * @test
+     */
+    public function dotEnvLoadMultipleFiles()
+    {
+        $this->dotEnv->reset()
+                ->addFilter(TrimQuotesFilter::class)
+                ->addFilter(BooleanValueFilter::class)
+                ->addFilter(NumericValueFilter::class);
+        $this->dotEnv->load(self::DEFAULT_ENV_FILE, __DIR__ . '/another.env');
+        $this->assertSame('abdeslam', $this->dotEnv->get('username'));
+        $this->assertSame('dev', $this->dotEnv->get('environment'));
+        $this->assertSame(true, $this->dotEnv->get('debug'));
+        $this->assertSame(false, $this->dotEnv->get('verbose'));
+        $this->assertSame('me@email.com', $this->dotEnv->get('DEFAULT_EMAIL'));
+        $this->assertSame('en', $this->dotEnv->get('DEFAULT_LOCALIZATION'));
+        $this->assertSame(null, $this->dotEnv->get('DEFAULT_NULL_1'));
+        $this->assertSame('', $this->dotEnv->get('DEFAULT_NULL_2'));
     }
 
     /**
@@ -58,13 +95,12 @@ class DotEnvTest extends TestCase
      */
     public function dotEnvGet()
     {
-        $dotEnv = $this->getDefaultDotEnv();
-        $this->assertSame('abdeslam', $dotEnv->get('username'));
+        $this->assertSame('abdeslam', $this->dotEnv->get('username'));
 
-        $this->assertSame('default', $dotEnv->get('non_existing_key', 'default'));
+        $this->assertSame('default', $this->dotEnv->get('non_existing_key', 'default'));
 
         $this->expectException(ItemNotFoundException::class);
-        $dotEnv->get('non_existing_key');
+        $this->dotEnv->get('non_existing_key');
     }
     
     /**
@@ -72,10 +108,10 @@ class DotEnvTest extends TestCase
      */
     public function dotEnvHas()
     {
-        $dotEnv = new DotEnv(new Resolver(), new Parser());
-        $this->assertFalse($dotEnv->has('username'));
-        $dotEnv->load(self::DEFAULT_ENV_FILE);
-        $this->assertTrue($dotEnv->has('username'));
+        $this->dotEnv = new DotEnv(new Resolver(), new Parser());
+        $this->assertFalse($this->dotEnv->has('username'));
+        $this->dotEnv->load(self::DEFAULT_ENV_FILE);
+        $this->assertTrue($this->dotEnv->has('username'));
     }
 
     /**
@@ -83,15 +119,16 @@ class DotEnvTest extends TestCase
      */
     public function dotEnvAll()
     {
-        $dotEnv = new DotEnv(new Resolver(), new Parser());
-        $this->assertEmpty($dotEnv->all());
-        $dotEnv->load(self::DEFAULT_ENV_FILE);
+        $this->dotEnv = new DotEnv(new Resolver(), new Parser());
+        $this->assertEmpty($this->dotEnv->all());
+        $this->dotEnv->load(self::DEFAULT_ENV_FILE);
         $items = [
             'username' => 'abdeslam',
             '"environment"' => 'dev',
-            'debug' => "'true'"
+            'debug' => "'true'",
+            'verbose' => 'FALSE'
         ];
-        $this->assertSame($items, $dotEnv->all());
+        $this->assertSame($items, $this->dotEnv->all());
     }
 
     
@@ -100,17 +137,19 @@ class DotEnvTest extends TestCase
      */
     public function dotEnvPopulate()
     {
-        $dotEnv = new DotEnv(new Resolver(), new Parser());
-        $dotEnv->load(self::DEFAULT_ENV_FILE)->populate();
+        $this->dotEnv->reset();
+        $this->dotEnv->addFilter(TrimQuotesFilter::class)
+                    ->addFilter(EmptyStringToNullFilter::class)
+                    ->addFilter(BooleanValueFilter::class)
+                    ->addFilter(NumericValueFilter::class);
+        $this->dotEnv->load(self::DEFAULT_ENV_FILE, __DIR__ . '/another.env')->populate();
         $this->assertSame('abdeslam', $_ENV['username']);
         $this->assertSame('abdeslam', getenv('username'));
         $this->assertSame('abdeslam', $_SERVER['username']);
-    }
-
-    protected function getDefaultDotEnv(): DotEnv
-    {
-        $dotEnv = new DotEnv(new Resolver(), new Parser());
-        $dotEnv->load(__DIR__ . '/.env');
-        return $dotEnv;
+        // getenv() translates NULL to an empty string automatically
+        $this->assertSame('', getenv('DEFAULT_NULL_1'));
+        $this->assertSame(null, $_ENV['DEFAULT_NULL_1']);
+        $this->assertSame('', getenv('DEFAULT_NULL_2'));
+        $this->assertSame(null, $_ENV['DEFAULT_NULL_2']);
     }
 }

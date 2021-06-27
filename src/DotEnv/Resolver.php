@@ -17,7 +17,7 @@ class Resolver implements ResolverInterface
     /**
      * @inheritDoc
      */
-    public function setFilepaths(array $filepaths): ResolverInterface
+    public function setFilepaths(string ...$filepaths): ResolverInterface
     {
         $this->filepaths = $filepaths;
         return $this;

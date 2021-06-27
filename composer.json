@@ -11,7 +11,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Abdeslam\\DotEnv\\": "src/"
+            "Abdeslam\\": "src/"
         }
     },
     "autoload-dev": {

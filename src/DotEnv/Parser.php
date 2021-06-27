@@ -6,14 +6,13 @@
 
 namespace Abdeslam\DotEnv;
 
+use ReflectionClass;
 use Abdeslam\DotEnv\Contracts\FilterInterface;
 use Abdeslam\DotEnv\Contracts\ParserInterface;
 use Abdeslam\DotEnv\Exceptions\InvalidFilterException;
-use Abdeslam\DotEnv\Exceptions\InvalidFilterReturnValueException;
+use Abdeslam\DotEnv\Exceptions\InvalidEnvFileException;
 use Abdeslam\DotEnv\Exceptions\InvalidResourceException;
-use InvalidArgumentException;
-use ReflectionClass;
-use RuntimeException;
+use Abdeslam\DotEnv\Exceptions\InvalidFilterReturnValueException;
 
 class Parser implements ParserInterface
 {
@@ -27,7 +26,7 @@ class Parser implements ParserInterface
     {
         /** @var resource $resource */
         if (!is_resource($resource)) {
-            throw new InvalidArgumentException("File to parse must be a valid readable resource");
+            throw new InvalidEnvFileException("File to parse must be a valid readable resource");
         }
         $this->resource = $resource;
         return $this;
@@ -52,7 +51,7 @@ class Parser implements ParserInterface
         $items = [];
         while (!feof($this->resource)) {
             $line = trim(fgets($this->resource));
-            if (strpos($line, '#') === 0 || $line === '') {
+            if (strpos($line, '#') === 0 || strpos($line, '=') === 0 || $line === '') {
                 continue;
             }
             $keyValue = explode('=', $line);
@@ -92,7 +91,7 @@ class Parser implements ParserInterface
 
     /**
      * checks if the returned data of the filter is a valid array
-     * 
+     *
      * in the format ['key' => ..., 'value' => ...]
      *
      * @param array $filteredData

@@ -26,7 +26,8 @@ class CacheManager implements CacheInterface
      * @param string $dir
      * @throws InvalidCacheDirectoryException
      */
-    public function __construct(string $dir) {
+    public function __construct(string $dir)
+    {
         if (!is_dir($dir)) {
             throw new InvalidCacheDirectoryException("Directory $dir was not found.");
         }
@@ -162,7 +163,7 @@ class CacheManager implements CacheInterface
     }
 
     /**
-     * checks if a cache item is expired 
+     * checks if a cache item is expired
      *
      * @param string $key
      * @return boolean
