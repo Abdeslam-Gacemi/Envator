@@ -52,9 +52,9 @@ $envator = new Envator();
 $envator->load('/path/to/.env');
 $envator->populate();
 
-echo getenv('APP_NAME'); // output: my_awesome_application
-echo $_ENV['APP_NAME']; // output: my_awesome_application
-echo $_SERVER['APP_NAME']; // output: my_awesome_application
+echo getenv('APP_NAME'); // output: 'my_awesome_application'
+echo $_ENV['APP_NAME']; // output: 'my_awesome_application'
+echo $_SERVER['APP_NAME']; // output: 'my_awesome_application'
 ```
 
 loading multiple .env files
