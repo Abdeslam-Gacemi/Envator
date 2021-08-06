@@ -1,5 +1,5 @@
 # Envator package
-**[Envator](https://github.com/Abdeslam-Gacemi/Envator.git)** is a **.env** file loader that supports loading multiple files, caching (using psr-16 simple-cache interface) and using filters that unable type casting of booleans, numerics and variables inside values and more ... 
+**[Envator](https://github.com/Abdeslam-Gacemi/Envator.git)** is a **.env** file loader that supports loading multiple files, caching (using psr-16 simple-cache interface) and using filters that enable type casting of booleans, numerics and variables inside values and more ... 
 
 ## Table of contents
   - [Requirements](#requirements)
@@ -275,7 +275,7 @@ echo getenv('MY_PREFIX_USERNAME'); // output : 'admin'
 ```
 
 ### 6. options
-when population the variables to the environment, you can specify what way the variables are populated by passing an array as an argument to `Envator::populate()` method :
+when populating the variables to the environment, you can specify what way the variables are populated by passing an array as an argument to `Envator::populate()` method :
 ```php
 <?php
 
