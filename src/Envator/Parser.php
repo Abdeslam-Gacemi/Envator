@@ -6,7 +6,6 @@
 
 namespace Abdeslam\Envator;
 
-use ReflectionClass;
 use Abdeslam\Envator\Contracts\FilterInterface;
 use Abdeslam\Envator\Contracts\ParserInterface;
 use Abdeslam\Envator\Exceptions\InvalidFilterException;
@@ -54,7 +53,7 @@ class Parser implements ParserInterface
             if (strpos($line, '#') === 0 || strpos($line, '=') === 0 || $line === '') {
                 continue;
             }
-            $keyValue = explode('=', $line);
+            $keyValue = explode('=', $line, 2);
             $key = trim($keyValue[0]);
             $value = isset($keyValue[1]) ? trim($keyValue[1]) : null;
             foreach ($filters as $filter) {
@@ -80,12 +79,10 @@ class Parser implements ParserInterface
     protected function validateFilter(string $filter)
     {
         if (!class_exists($filter)) {
-            throw new InvalidFilterException("Filter class $filter not found");
+            throw new InvalidFilterException("Filter class '$filter' not found");
         }
-        $reflect = new ReflectionClass($filter);
-        $filterInterface = FilterInterface::class;
-        if (!$reflect->implementsInterface(FilterInterface::class)) {
-            throw new InvalidFilterException("Filter class must implement $filterInterface");
+        if (!is_subclass_of($filter, $filterInterface = FilterInterface::class)) {
+            throw new InvalidFilterException("Filter class '$filter' must implement '$filterInterface'");
         }
     }
 

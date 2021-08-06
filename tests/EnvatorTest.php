@@ -35,8 +35,8 @@ class EnvatorTest extends TestCase
      */
     public function envatorFilters()
     {
-        $this->envator->addFilter(TrimQuotesFilter::class);
-        $this->envator->addFilter(BooleanValueFilter::class);
+        $this->envator->addFilter(TrimQuotesFilter::class)
+            ->addFilter(BooleanValueFilter::class);
         $this->assertTrue($this->envator->hasFilter(TrimQuotesFilter::class));
         $this->assertTrue($this->envator->hasFilter(BooleanValueFilter::class));
         $this->assertSame(
@@ -77,7 +77,8 @@ class EnvatorTest extends TestCase
         $this->envator->reset()
                 ->addFilter(TrimQuotesFilter::class)
                 ->addFilter(BooleanValueFilter::class)
-                ->addFilter(NumericValueFilter::class);
+                ->addFilter(NumericValueFilter::class)
+                ->addFilter('non_existent');
         $this->envator->load(self::DEFAULT_ENV_FILE, __DIR__ . '/another.env');
         $this->assertSame('abdeslam', $this->envator->get('username'));
         $this->assertSame('dev', $this->envator->get('environment'));

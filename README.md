@@ -2,8 +2,6 @@
 **[Envator](https://github.com/Abdeslam-Gacemi/Envator.git)** is a **.env** file loader that supports loading multiple files, caching (using psr-16 simple-cache interface) and using filters that unable type casting of booleans, numerics and variables inside values and more ... 
 
 ## Table of contents
-- [Envator package](#envator-package)
-  - [Table of contents](#table-of-contents)
   - [Requirements](#requirements)
   - [Installation](#installation)
     - [1. Using Composer](#1-using-composer)
